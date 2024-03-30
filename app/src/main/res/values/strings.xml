@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Picasso_project</string>
     <string name="button">Получить персонажа</string>
+    <string name="get_character">Get character</string>
 </resources>

@@ -3,6 +3,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.GridLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -14,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var counter: Int = -1
     private var totalNinjas = 0
+    private val adapter = Adapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -24,8 +27,6 @@ class MainActivity : AppCompatActivity() {
                 counter ++
                 getResult(counter)
         } else {
-                binding.textView.visibility = View.VISIBLE
-                binding.textView.text = "Персонажи кончились"
                 binding.button.visibility = View.GONE
             }
 
@@ -48,15 +49,14 @@ class MainActivity : AppCompatActivity() {
 
                 if(imagesCount>0) {
                     val imageURL = character.getJSONArray("images").getString(0)
-                    Picasso.get().load(imageURL).error(R.drawable.cross_error).into(binding.imageView)
-                    binding.textView.visibility = View.VISIBLE
-                    binding.textView.text = name.toString()
-                } else {
-                    binding.imageView.setImageResource(R.drawable.cross_error)
+                    binding.recyclerCharacter.layoutManager = GridLayoutManager(this@MainActivity, 3)
+                    binding.recyclerCharacter.adapter = adapter
+                    val personData = Character(name, imageURL)
+                    adapter.addCharacter(personData)
                 }
             },
             {
-                binding.imageView.setImageResource(R.drawable.cross_error)
+//
             }
         )
         queue.add(stringRequest)
