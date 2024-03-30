@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         } else {
                 binding.textView.visibility = View.VISIBLE
                 binding.textView.text = "Персонажи кончились"
+                binding.button.visibility = View.GONE
             }
 
             }
