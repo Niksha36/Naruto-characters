@@ -8,9 +8,8 @@ import com.example.picasso_project.databinding.OneCharacterTemplateBinding
 import com.squareup.picasso.Picasso
 
 class Adapter: RecyclerView.Adapter<Adapter.CharacterHolder>() {
-    private var charactersList = ArrayList<Character>()
-
-    class CharacterHolder(item: View) : RecyclerView.ViewHolder(item) {
+    private var charactersList =  ArrayList<Character>()
+    class CharacterHolder(item: View): RecyclerView.ViewHolder(item) {
         val binding = OneCharacterTemplateBinding.bind(item)
         fun forBind(characterData: Character) = with(binding) {
             Picasso.get().load(characterData.image).error(R.drawable.cross_error).into(itemImage)

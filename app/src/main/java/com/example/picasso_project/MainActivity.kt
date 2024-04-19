@@ -7,11 +7,14 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.picasso_project.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var counter: Int = 0
+    private var counter: Int = 1
     private val adapter = Adapter()
     private val requestQueue by lazy { Volley.newRequestQueue(this) } // Use lazy initialization
 
@@ -41,16 +44,17 @@ class MainActivity : AppCompatActivity() {
             return
         }
         val limit = 9 // Adjust based on how many items you want to fetch each time
-        val offset = counter
-        val url = "https://narutodb.xyz/api/character?limit=$limit&offset=$offset"
-
+        val url = "https://narutodb.xyz/api/character?page=$counter&limit=$limit"
+        binding.progressBar.visibility = View.VISIBLE
         val stringRequest = StringRequest(Request.Method.GET, url, { response ->
             handleResponse(response)
+            binding.progressBar.visibility = View.GONE
         }, {
             // Handle error
         })
-
-        requestQueue.add(stringRequest)
+        GlobalScope.launch(Dispatchers.IO) {
+            requestQueue.add(stringRequest)
+        }
     }
 
     private fun handleResponse(response: String) {
@@ -69,6 +73,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         adapter.addCharacter(newCharacters)
-        counter += newCharacters.size
+        counter += 1
     }
 }
